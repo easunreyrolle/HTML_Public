@@ -7,9 +7,15 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
         }
         .input-group {
             margin-bottom: 15px;
@@ -18,38 +24,97 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+            color: #34495e;
         }
         input {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
         }
         button {
-            background-color: #4CAF50;
+            background-color: #3498db;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
+            margin: 10px 5px 10px 0;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #resetBtn {
+            background-color: #95a5a6;
+        }
+        #resetBtn:hover {
+            background-color: #7f8c8d;
         }
         #result {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f0f0f0;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
             border-radius: 5px;
+            border: 1px solid #ddd;
             display: none;
         }
         .error {
-            color: red;
+            color: #e74c3c;
             margin-top: 10px;
+            padding: 10px;
+            background-color: #fadbd8;
+            border-radius: 4px;
+            display: none;
         }
         .file-preview {
             margin-top: 15px;
-            padding: 10px;
+            padding: 15px;
             background-color: #fff;
             border: 1px solid #ddd;
             font-family: monospace;
             white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -58,42 +123,42 @@
     
     <div class="input-group">
         <label for="plantCapacity">Plant Capacity (KLD):</label>
-        <input type="number" id="plantCapacity" step="0.01" placeholder="Enter KLD value">
+        <input type="number" id="plantCapacity" step="0.01" placeholder="Enter KLD value" required>
     </div>
     
     <div class="input-group">
         <label for="operatingHours">Operating Hours:</label>
-        <input type="number" id="operatingHours" step="0.01" placeholder="Enter hours">
+        <input type="number" id="operatingHours" step="0.01" placeholder="Enter hours" required>
     </div>
     
     <div class="input-group">
         <label for="BOD">BOD (MG/L):</label>
-        <input type="number" id="BOD" step="0.01" placeholder="Enter MG/L value">
+        <input type="number" id="BOD" step="0.01" placeholder="Enter MG/L value" min="0">
     </div>
     
     <div class="input-group">
         <label for="COD">COD (MG/L):</label>
-        <input type="number" id="COD" step="0.01" placeholder="Enter MG/L value">
+        <input type="number" id="COD" step="0.01" placeholder="Enter MG/L value" min="0">
     </div>
     
     <div class="input-group">
         <label for="TDS">TDS (MG/L):</label>
-        <input type="number" id="TDS" step="0.01" placeholder="Enter MG/L value">
+        <input type="number" id="TDS" step="0.01" placeholder="Enter MG/L value" min="0">
     </div>
      
     <div class="input-group">
         <label for="TSS">TSS (MG/L):</label>
-        <input type="number" id="TSS" step="0.01" placeholder="Enter MG/L value">
+        <input type="number" id="TSS" step="0.01" placeholder="Enter MG/L value" min="0">
     </div>
     
     <div class="input-group">
         <label for="OIL_GREASE">OIL & GREASE (MG/L):</label>
-        <input type="number" id="OIL_GREASE" step="0.01" placeholder="Enter MG/L value">
+        <input type="number" id="OIL_GREASE" step="0.01" placeholder="Enter MG/L value" min="0">
     </div>
     
     <div class="input-group">
         <label for="NH3_N">NH3-N (MG/L):</label>
-        <input type="number" id="NH3_N" step="0.01" placeholder="Enter MG/L value">
+        <input type="number" id="NH3_N" step="0.01" placeholder="Enter MG/L value" min="0">
     </div>
     
     <div class="input-group">
@@ -103,23 +168,46 @@
     
     <div class="input-group">
         <label for="PH">PH:</label>
-        <input type="number" id="PH" step="0.01" placeholder="Enter PH value">
+        <input type="number" id="PH" step="0.01" placeholder="Enter PH value" min="0" max="14">
     </div>
     
     <button id="calculateBtn">Calculate & Download</button>
+    <button id="resetBtn">Reset</button>
     <div id="error" class="error"></div>
     
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <p>Calculating and preparing download...</p>
+    </div>
+    
     <div id="result">
-        <h3>Calculation Result</h3>
-        <p>Capacity: <span id="capacityResult"></span> m³/hr</p>
+        <h3>Calculation Results</h3>
+        <p>Plant Capacity: <strong><span id="capacityResult"></span> m³/hr</strong></p>
+        
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Value</th>
+                    <th>Unit</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        
+        <h4>File Preview:</h4>
         <div class="file-preview" id="filePreview"></div>
     </div>
 
     <script>
         document.getElementById('calculateBtn').addEventListener('click', function() {
+            // Show loading indicator
+            document.getElementById('loading').style.display = 'block';
+            
             // Get input values
             const plantCapacity = parseFloat(document.getElementById('plantCapacity').value);
             const operatingHours = parseFloat(document.getElementById('operatingHours').value);
+            // Use || 0 to default empty optional fields to zero for calculations
             const BOD = parseFloat(document.getElementById('BOD').value) || 0;
             const COD = parseFloat(document.getElementById('COD').value) || 0;
             const TDS = parseFloat(document.getElementById('TDS').value) || 0;
@@ -128,75 +216,249 @@
             const NH3_N = parseFloat(document.getElementById('NH3_N').value) || 0;
             const TEMPERATURE = parseFloat(document.getElementById('TEMPERATURE').value) || 0;
             const PH = parseFloat(document.getElementById('PH').value) || 0;
+
+            // NOTE: TDS, OIL_GREASE, TEMPERATURE, and PH inputs are collected but not used in the current calculations.
+            // They can be incorporated in the future for more advanced calculations.
             
             const errorDiv = document.getElementById('error');
+            errorDiv.style.display = 'none';
 
             // Validate required inputs
             if (isNaN(plantCapacity) || plantCapacity <= 0) {
-                errorDiv.textContent = "Please enter a valid plant capacity (must be greater than 0)";
+                showError("Please enter a valid plant capacity (must be greater than 0)");
                 return;
             }
-            
             if (isNaN(operatingHours) || operatingHours <= 0) {
-                errorDiv.textContent = "Please enter valid operating hours (must be greater than 0)";
+                showError("Please enter valid operating hours (must be greater than 0)");
+                return;
+            }
+            if (PH !== 0 && (PH < 0 || PH > 14)) { // Allow 0, but not other invalid numbers
+                showError("Please enter a valid pH value between 0 and 14");
                 return;
             }
             
-            // Clear any previous errors
-            errorDiv.textContent = '';
+            // --- CALCULATIONS ---
+
+            // Core calculation: hourly flow rate in m³/hr (1 KLD = 1 m³/day)
+            const hourlyFlow = plantCapacity / operatingHours;
             
-            // Calculate capacity
-            const capacity = plantCapacity / operatingHours;
-            const roundedCapacity = Math.round(capacity * 100) / 100;
+            // Calculate components based on design parameters
+            // Design parameter: 2x hourly flow for safety/peak
+            const manualBarScreen = hourlyFlow * 2;
+            const oilSkimmer = hourlyFlow * 2;
+
+            // Design parameter: 12 hours of retention time for equalization
+            const equalizationTank = hourlyFlow * 12; // Unit: m³
+
+            // Design parameter: 0.6 m³/hr of air per m³ of tank volume for mixing
+            const mixingBlower = equalizationTank * 0.6; // Unit: m³/hr
+
+            const rawTransferPump = hourlyFlow;
+
+            // Aeration Blower Calculation (Oxygen Requirement)
+            // Formula calculates total kg of O2 required per day and converts to air flow in m³/hr
+            // Numerator: Oxygen demand in kg/day from BOD, COD, and NH3-N loads
+            const O2_demand_kg_day = ((BOD * plantCapacity / 1000) * 2) + 
+                                     ((COD * plantCapacity / 1000) * 2) + 
+                                     ((NH3_N * plantCapacity / 1000) * 4);
+            // Denominator: O2 supply rate (kg O2 / m³ air) * SOTE * hours. SOTE (Standard Oxygen Transfer Efficiency) assumed 10% (0.1).
+            const aerationBlowerM3hr = O2_demand_kg_day / (0.21 * 1.21 * 24 * 0.1); // Result is in m³/hr
+            // BUG FIX: Convert m³/hr to m³/min for table display
+            const aerationBlowerM3min = aerationBlowerM3hr / 60; // Result is in m³/min
+
+            // Determine number of batch operations for SBR based on BOD load
+            let numBatchOperations;
+            if (BOD < 300) {
+                numBatchOperations = 6;
+            } else if (BOD < 600) {
+                numBatchOperations = 4;
+            } else {
+                numBatchOperations = 2;
+            }
             
-            // Display result
-            document.getElementById('capacityResult').textContent = roundedCapacity;
-            document.getElementById('result').style.display = 'block';
+            // SBR tank volume is the daily capacity divided by the number of batches
+            const sbrTank = plantCapacity / numBatchOperations; // Unit: m³
+
+            // Design parameter: 2 hours of retention time
+            const filtrateTank = hourlyFlow * 2; // Unit: m³
             
-            // Original file content
-            const originalLines = [
-                "HANDLE\tBLOCKNAME\tAERATIONBLOWER(CA-21)\tCAPACITY:XXXM3/HR@XXBAR(CB-21)\tQUANTITY:2NO(1W+1S)(CC-21)\tMOC:CI(CD-21)\tRAWTRANSFERPUMP(CE-21)\tCAPACITY:4.4M3/HR@1.5BAR(CF-21)\tQUANTITY:2NO(1W+1S)(CG-21)\tMOC:CI(DCH-21)\tEQUALIZATIONTANK(CL-23)\tCAPACITY:20M3(CM-23)\tQUANTITY:1NO(CN-23)\tMOC:RCC(CO-23)\tSWD:4M(CP-23)\tCOARSEBUBBLEDIFFUSER(CI-22)\tQUANTITY:1NO(CJ-22)\tMOC:EPDM(CK-22)\tOILSKIMMERCHAMBER(CQ-24)\tCAPACITY:XXX(CR-24)\tQUANTITY:1NO(CS-24)\tMOC:RCC(CT-24)\tOILSKIMMER(CU-25)\tCAPACITY:3.5M3/HR(CV-25)\tQUANTITY:1NO(CW-25)\tMOC:CSFRAMEPUBELT(CX-25)\tSCREENCHAMBER(CY-26)\tCAPACITY;XXX(CZ-26)\tMOC:RCC(DB-26)\tQUANTITY:1NO(DA-26)\tMANUALBARSCREEN(DC-27)\tCAPACITY:3.5M3/HR(DD-27)\tQUANTITY:1NO(DE-27)\tMOC:SS(DF-27)\tCENTRIFUGFEEDPUMP(BD-14)\tCAPACITY:1M3/HR@2BAR(BE-14)\tQUANTITY:2NO(1W+1S)(BF-14)\tMOC:CI(BG-14)\tMIXERFORSLUDGETANK(BH-15)\tQUANTITY:1NO(BI-15)\tMOC:MSFRP(CK-22)\tSLUDGETANK(BK-16)\tCAPACITY:2M3(BL-16)\tQUANTITY:1NO(BM-16)\tMOC:RCC(BN-16)\tSLUDGETRANSFERPUMP(BO-17)\tCAPACITY:XXX(BP-17)\tQUANTITY:2NO(1W+1S)(BQ-17)\tMOC:RCC(BR-17)\tHYPODOSINGPUMP(L-5)\tCAPACITY:1LPH(M-5)\tQUANTITY:1NO(N-5)\tMOC:PP(O-5)\tHYPODOSINGTANK(P-6)\tCAPACITY:60LTR(Q-6)\tQUANTITY:1NO(R-6)\tMOC:PP(S-6)\tPOLYMERDOSINGMIXER(X-8)\tQUANTITY:1NO(Y-8)\tMOC:PP(Z-8)\tPOLYMERDOSINGTANK(AA-9)\tCAPACITY:200LTR(AB-9)\tQUANTITY:1NO(AC-9)\tMOC:PP(AD-9)\tPOLYMERDOSINGPUMP(T-7)\tCAPACITY:4LPH(U-7)\tQUANTITY:1NO(V-7)\tMOC:PP(W-7)\tVERTICALCENTRIFUGE(AZ-13)\tCAPACITY:1M3/HR(BA-13)\tQUANTITY:1NO(BB-13)\tMOC:SS(BC-13)\tFINEBUBBLEDIFFUSER(D-3)\tQUANTITY:1NO(E-3)\tMOC:EPDM(F-3)\tSBRTANK(G-4)\tCAPACITY:27M3(H-4)\tQUANTITY:1NO(I-4)\tMOC:RCC(J-4)\tSWD:4M(K-4)\tFILTERATETANK(BW-19)\tCAPACITY:10M3(BX-19)\tQUANTITY:1NO(BY-19)\tMOC:RCC(BZ-19)\tFILTERFEEDPUMP(BS-18)\tCAPACITY:1.75M3/HR@1.6BAR(BT-18)\tQUANTITY:2NO(1W+1S)(BU-18)\tMOC:CI(BV-18)\tTREATEDWATERSTORAGETANK(AE-10)\tCAPACITY:35M3(AF-10)\tQUANTITY:1NO(AG-10)\tMOC:RCC(AH-10)\tACTIVATEDCARBONFILTER(AI-11)\tSIZE:0.35MŘ1.8MHT(AJ-11)\tQUANTITY:1NO(AK-11)\tMOC:FRP(AL-11)\tACFMEDIA(AM-11)\tACTIVATEDCARBON:XXX(AN-11)\tGRAVEL:XXX(AO-11)\tPEBBALS:XXX(AP-11)\tPRESSURESANDFILTER(AQ-12)\tSIZE:0.4MŘX1.8MHT(AR-12)\tQUANTITY:1NO(AS-12)\tMOC:FRP(AT-12)\tPAFMEDIA(AU-12)\tGRAVEL:XXX(AV-12)\tFINESAND:XXX(AW-12)\tCOARSESAND:XXX(AX-12)\tPEBBALS:XXX(AY-12)",
-                "'24DD\tAERATION BLOWER\tAERATION BLOWER (CA-21)\tCAPACITY:XXXM3/HR@XXBAR (CB-21)\tQUANTITY:2 NO(1W+1S) (CC-21)\tMOC:CI (CD-21)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'2548\tAERATION BLOWER\tMIXING BLOWER (CA-21A)\tCAPACITY:XXXM3/HR@XXBAR (CB-21A)\tQUANTITY:2 NO(1W+1S) (CC-21A)\tMOC:CI (CD-21A)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'60D\tRAW TRANSFER PUMP\t<>\t<>\t<>\t<>\tRAW TRANSFER PUMP (CE-21)\tCAPACITY: 4.4M3/HR@1.5 BAR (CF-21)\tQUANTITY:2NO(1W+1S) (CG-21)\tMOC:CI (CH-21)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'60B\tQQUALIZATIO TANK\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tEQUALIZATION TANK (CL-23)\tCAPACITY: 20M3 (CM-23)\tQUANTITY:1NO (CN-23)\tMOC: RCC (CO-23)\tSWD:4M (CP-23)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'60C\tCOARSE BUBBLE DIFFUSER\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tCOARSE BUBBLE DIFFUSER (CI-22)\tQUANTITY:1NO (CJ-22)\tMOC:EPDM (CK-22)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'60A\tOIL SKIMMER CHAMBER\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tOIL SKIMMER CHAMBER (CQ-24)\tCAPACITY:XXX (CR-24)\tQUANTITY:1NO (CS-24)\tMOC:RCC (CT-24)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'609\tOIL SKIMMER\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tOIL SKIMMER (CU-25)\tCAPACITY:3.5M3/HR (CV-25)\tQUANTITY:1NO (CW-25)\tMOC:CS FRAME PU BELT (CX-25)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'607\tSCREEN CHAMBER\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tSCREEN CHAMBER (CY-26)\tCAPACITY;XXX (CZ-26)\tMOC:RCC (DB-26)\tQUANTITY: 1NO (DA-26)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'606\t*U27\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tMANUAL BAR SCREEN (DC-27)\tCAPACITY:3.5M3/HR (DD-27)\tQUANTITY: 1NO (DE-27)\tMOC:SS (DF-27)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'614\tCENTRIFUGU FEED PUMP\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tCENTRIFUGE FEED PUMP (BD-14)\tCAPACITY:1M3/HR@2BAR (BE-14)\tQUANTITY:2NO(1W+1S) (BF-14)\tMOC:CI (BG-14)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'613\tMIXER FOR SLUDGE TANK\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tMIXER FOR SLUDGE TANK (BH-15)\tQUANTITY:1NO (BI-15)\tMOC:MSFRP (BJ-15)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'612\tSLUDGE TANK\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tSLUDGE TANK (BK-16)\tCAPACITY:2M3 (BL-16)\tQUANTITY:1NO (BM-16)\tMOC:RCC (BN-16)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'611\tSLUDGE TRANSFER PUMP\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tSLUDGE TRANSFER PUMP (BO-17)\tCAPACITY:XXX (BP-17)\tQUANTITY: 2NO(1W+1S) (BQ-17)\tMOC:RCC (BR-17)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'61D\tHYPO DOSING PUMP\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tHYPO DOSING PUMP (L-5)\tCAPACITY:1 LPH (M-5)\tQUANTITY:1NO (N-5)\tMOC:PP (O-5)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'61C\tHYPO DOSING TANK\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\tHYPO DOSING TANK (P-6)\tCAPACITY:60 LTR (Q-6)\tQUANTITY:1NO (R-6)\tMOC:PP (S-6)\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>",
-                "'61A\tPOLYMER DOSING MIXER\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t<>\t"
+            // PSF and ACF size based on filtration velocity
+            // Area = Flow (m³/hr) / Velocity (m/hr). Diameter = sqrt(4 * Area / PI)
+            const psfVelocity = 15; // m/hr
+            const acfVelocity = 12; // m/hr
+            const psfSize = Math.sqrt((rawTransferPump * 4) / (psfVelocity * Math.PI)); // Unit: m DIA
+            const acfSize = Math.sqrt((rawTransferPump * 4) / (acfVelocity * Math.PI)); // Unit: m DIA
+            
+            // Design parameter: 1 day of storage
+            const treatedWaterStorageTank = plantCapacity; // Unit: m³
+            
+            // Sludge Tank Calculation
+            // Sludge production (kg/day) = biological sludge + inert TSS
+            // Yield coefficient for biological sludge is assumed ~0.5 kg VSS / kg BOD
+            // Sludge concentration is assumed 5 kg/m³ (0.5%)
+            // The result is sludge volume in m³/day. The tank is sized to hold 1 day's production.
+            const sludgeVolumePerDay = (((BOD * plantCapacity / (1000 * 2)) + (TSS * plantCapacity / 1000)) / 5); // Unit: m³/day
+            const sludgeTank = sludgeVolumePerDay; // Unit: m³ (1-day holding capacity)
+
+            // Pump Sizing
+            // Sludge transfer pump: Empties one batch's sludge in 0.25 hours (15 mins)
+            const sludgePerBatch = sludgeVolumePerDay / numBatchOperations; // m³/batch
+            const sludgeTransferPump = sludgePerBatch / 0.25; // m³/hr
+            
+            // Centrifuge sizing: Process daily sludge over 16 operating hours
+            const centrifugeFeedPump = sludgeVolumePerDay / 16; // m³/hr
+            const centrifuge = centrifugeFeedPump;
+            
+            // --- PREPARE RESULTS FOR DISPLAY ---
+            
+            // Create an object to hold all formatted results for consistency
+            const formattedResults = {
+                mainCapacity: hourlyFlow.toFixed(2),
+                manualBarScreen: manualBarScreen.toFixed(4),
+                oilSkimmer: oilSkimmer.toFixed(4),
+                equalizationTank: equalizationTank.toFixed(4),
+                mixingBlower: mixingBlower.toFixed(4),
+                rawTransferPump: rawTransferPump.toFixed(4),
+                aerationBlowerM3hr: aerationBlowerM3hr.toFixed(4), // For file
+                aerationBlowerM3min: aerationBlowerM3min.toFixed(4), // For table
+                numBatchOperations: numBatchOperations,
+                sbrTank: sbrTank.toFixed(4),
+                filtrateTank: filtrateTank.toFixed(4),
+                psfSize: psfSize.toFixed(4),
+                acfSize: acfSize.toFixed(4),
+                treatedWaterStorageTank: treatedWaterStorageTank.toFixed(4),
+                sludgeTank: sludgeTank.toFixed(4),
+                sludgeTransferPump: sludgeTransferPump.toFixed(4),
+                centrifugeFeedPump: centrifugeFeedPump.toFixed(4),
+                centrifuge: centrifuge.toFixed(4)
+            };
+            
+            const resultsForTable = [
+                { name: "MANUAL BAR SCREEN", value: formattedResults.manualBarScreen, unit: "m³/hr" },
+                { name: "OIL SKIMMER", value: formattedResults.oilSkimmer, unit: "m³/hr" },
+                { name: "EQUALIZATION TANK", value: formattedResults.equalizationTank, unit: "m³" },
+                { name: "MIXING BLOWER", value: formattedResults.mixingBlower, unit: "m³/hr" },
+                { name: "RAW TRANSFER PUMP", value: formattedResults.rawTransferPump, unit: "m³/hr" },
+                { name: "AERATION BLOWER", value: formattedResults.aerationBlowerM3min, unit: "m³/min" },
+                { name: "Number of Batch Operations", value: formattedResults.numBatchOperations, unit: "" },
+                { name: "SBR TANK", value: formattedResults.sbrTank, unit: "m³" },
+                { name: "FILTRATE TANK", value: formattedResults.filtrateTank, unit: "m³" },
+                { name: "PSF Size", value: formattedResults.psfSize, unit: "m DIA" },
+                { name: "ACF Size", value: formattedResults.acfSize, unit: "m DIA" },
+                { name: "TREATED WATER STORAGE TANK", value: formattedResults.treatedWaterStorageTank, unit: "m³" },
+                { name: "SLUDGE TANK", value: formattedResults.sludgeTank, unit: "m³" },
+                { name: "SLUDGE TRANSFER PUMP", value: formattedResults.sludgeTransferPump, unit: "m³/hr" },
+                { name: "CENTRIFUGE FEED PUMP", value: formattedResults.centrifugeFeedPump, unit: "m³/hr" },
+                { name: "CENTRIFUGE", value: formattedResults.centrifuge, unit: "m³/hr" }
             ];
             
-            // Modify only row 2, column 4 (index 1,3 in zero-based arrays)
-            const modifiedLines = [...originalLines]; // Create a copy
-            const row2 = modifiedLines[1].split('\t');
-            row2[3] = `CAPACITY:${roundedCapacity}M3/HR@XXBAR (CB-21)`;
-            modifiedLines[1] = row2.join('\t');
+            // Display results in table
+            const tableBody = document.querySelector("#resultsTable tbody");
+            tableBody.innerHTML = "";
+            resultsForTable.forEach(item => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${item.name}</td><td>${item.value}</td><td>${item.unit}</td>`;
+                tableBody.appendChild(row);
+            });
             
-            // Join lines with newlines
-            const fileContent = modifiedLines.join('\n');
+            document.getElementById('capacityResult').textContent = formattedResults.mainCapacity;
+            document.getElementById('result').style.display = 'block';
             
+            // --- FILE GENERATION (REFACTORED with PLACEHOLDERS) ---
+            
+            // This template uses unique placeholders like {{PLACEHOLDER}}.
+            // This method is robust and not dependent on line/column numbers or hardcoded values.
+            const fileTemplate = `HANDLE	BLOCKNAME	AERATIONBLOWER(CA-21)	CAPACITY:XXXM3/HR@XXBAR(CB-21)	QUANTITY:2NO(1W+1S)(CC-21)	MOC:CI(CD-21)	RAWTRANSFERPUMP(CE-21)	CAPACITY:4.4M3/HR@1.5BAR(CF-21)	QUANTITY:2NO(1W+1S)(CG-21)	MOC:CI(DCH-21)	EQUALIZATIONTANK(CL-23)	CAPACITY:20M3(CM-23)	QUANTITY:1NO(CN-23)	MOC:RCC(CO-23)	SWD:4M(CP-23)	COARSEBUBBLEDIFFUSER(CI-22)	QUANTITY:1NO(CJ-22)	MOC:EPDM(CK-22)	OILSKIMMERCHAMBER(CQ-24)	CAPACITY:XXX(CR-24)	QUANTITY:1NO(CS-24)	MOC:RCC(CT-24)	OILSKIMMER(CU-25)	CAPACITY:3.5M3/HR(CV-25)	QUANTITY:1NO(CW-25)	MOC:CSFRAMEPUBELT(CX-25)	SCREENCHAMBER(CY-26)	CAPACITY;XXX(CZ-26)	MOC:RCC(DB-26)	QUANTITY:1NO(DA-26)	MANUALBARSCREEN(DC-27)	CAPACITY:3.5M3/HR(DD-27)	QUANTITY:1NO(DE-27)	MOC:SS(DF-27)	CENTRIFUGFEEDPUMP(BD-14)	CAPACITY:1M3/HR@2BAR(BE-14)	QUANTITY:2NO(1W+1S)(BF-14)	MOC:CI(BG-14)	MIXERFORSLUDGETANK(BH-15)	QUANTITY:1NO(BI-15)	MOC:MSFRP(CK-22)	SLUDGETANK(BK-16)	CAPACITY:2M3(BL-16)	QUANTITY:1NO(BM-16)	MOC:RCC(BN-16)	SLUDGETRANSFERPUMP(BO-17)	CAPACITY:XXX(BP-17)	QUANTITY:2NO(1W+1S)(BQ-17)	MOC:RCC(BR-17)	HYPODOSINGPUMP(L-5)	CAPACITY:1LPH(M-5)	QUANTITY:1NO(N-5)	MOC:PP(O-5)	HYPODOSINGTANK(P-6)	CAPACITY:60LTR(Q-6)	QUANTITY:1NO(R-6)	MOC:PP(S-6)	POLYMERDOSINGMIXER(X-8)	QUANTITY:1NO(Y-8)	MOC:PP(Z-8)	POLYMERDOSINGTANK(AA-9)	CAPACITY:200LTR(AB-9)	QUANTITY:1NO(AC-9)	MOC:PP(AD-9)	POLYMERDOSINGPUMP(T-7)	CAPACITY:4LPH(U-7)	QUANTITY:1NO(V-7)	MOC:PP(W-7)	VERTICALCENTRIFUGE(AZ-13)	CAPACITY:1M3/HR(BA-13)	QUANTITY:1NO(BB-13)	MOC:SS(BC-13)	FINEBUBBLEDIFFUSER(D-3)	QUANTITY:1NO(E-3)	MOC:EPDM(F-3)	SBRTANK(G-4)	CAPACITY:27M3(H-4)	QUANTITY:1NO(I-4)	MOC:RCC(J-4)	SWD:4M(K-4)	FILTERATETANK(BW-19)	CAPACITY:10M3(BX-19)	QUANTITY:1NO(BY-19)	MOC:RCC(BZ-19)	FILTERFEEDPUMP(BS-18)	CAPACITY:1.75M3/HR@1.6BAR(BT-18)	QUANTITY:2NO(1W+1S)(BU-18)	MOC:CI(BV-18)	TREATEDWATERSTORAGETANK(AE-10)	CAPACITY:35M3(AF-10)	QUANTITY:1NO(AG-10)	MOC:RCC(AH-10)	ACTIVATEDCARBONFILTER(AI-11)	SIZE:0.35M 1.8MHT(AJ-11)	QUANTITY:1NO(AK-11)	MOC:FRP(AL-11)	ACFMEDIA(AM-11)	ACTIVATEDCARBON:XXX(AN-11)	GRAVEL:XXX(AO-11)	PEBBALS:XXX(AP-11)	PRESSURESANDFILTER(AQ-12)	SIZE:0.4M X1.8MHT(AR-12)	QUANTITY:1NO(AS-12)	MOC:FRP(AT-12)	PAFMEDIA(AU-12)	GRAVEL:XXX(AV-12)	FINESAND:XXX(AW-12)	COARSESAND:XXX(AX-12)	PEBBALS:XXX(AY-12)
+'24DD	AERATION BLOWER	AERATION BLOWER (CA-21)	CAPACITY:{{AERATION_BLOWER_CAP}}M3/HR@XXBAR (CB-21)	QUANTITY:2 NO(1W+1S) (CC-21)	MOC:CI (CD-21)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'2548	AERATION BLOWER	MIXING BLOWER (CA-21A)	CAPACITY:{{MIXING_BLOWER_CAP}}M3/HR@XXBAR (CB-21A)	QUANTITY:2 NO(1W+1S) (CC-21A)	MOC:CI (CD-21A)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'60D	RAW TRANSFER PUMP	<>	<>	<>	<>	RAW TRANSFER PUMP (CE-21)	CAPACITY: {{RAW_TRANSFER_PUMP_CAP}}M3/HR@1.5 BAR (CF-21)	QUANTITY:2NO(1W+1S) (CG-21)	MOC:CI (CH-21)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'60B	QQUALIZATIO TANK	<>	<>	<>	<>	<>	<>	<>	<>	EQUALIZATION TANK (CL-23)	CAPACITY: {{EQUALIZATION_TANK_CAP}}M3 (CM-23)	QUANTITY:1NO (CN-23)	MOC: RCC (CO-23)	SWD:4M (CP-23)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'60C	COARSE BUBBLE DIFFUSER	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	COARSE BUBBLE DIFFUSER (CI-22)	QUANTITY:1NO (CJ-22)	MOC:EPDM (CK-22)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'60A	OIL SKIMMER CHAMBER	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	OIL SKIMMER CHAMBER (CQ-24)	CAPACITY:XXX (CR-24)	QUANTITY:1NO (CS-24)	MOC:RCC (CT-24)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'609	OIL SKIMMER	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	OIL SKIMMER (CU-25)	CAPACITY:{{OIL_SKIMMER_CAP}}M3/HR (CV-25)	QUANTITY:1NO (CW-25)	MOC:CS FRAME PU BELT (CX-25)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'607	SCREEN CHAMBER	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	SCREEN CHAMBER (CY-26)	CAPACITY;XXX (CZ-26)	MOC:RCC (DB-26)	QUANTITY: 1NO (DA-26)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'606	*U27	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	MANUAL BAR SCREEN (DC-27)	CAPACITY:{{MANUAL_BAR_SCREEN_CAP}}M3/HR (DD-27)	QUANTITY: 1NO (DE-27)	MOC:SS (DF-27)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'614	CENTRIFUGU FEED PUMP	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	CENTRIFUGE FEED PUMP (BD-14)	CAPACITY:{{CENTRIFUGE_FEED_PUMP_CAP}}M3/HR@2BAR (BE-14)	QUANTITY:2NO(1W+1S) (BF-14)	MOC:CI (BG-14)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'613	MIXER FOR SLUDGE TANK	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	MIXER FOR SLUDGE TANK (BH-15)	QUANTITY:1NO (BI-15)	MOC:MSFRP (BJ-15)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'612	SLUDGE TANK	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	SLUDGE TANK (BK-16)	CAPACITY:{{SLUDGE_TANK_CAP}}M3 (BL-16)	QUANTITY:1NO (BM-16)	MOC:RCC (BN-16)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'611	SLUDGE TRANSFER PUMP	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	SLUDGE TRANSFER PUMP (BO-17)	CAPACITY:{{SLUDGE_TRANSFER_PUMP_CAP}}m3/hr (BP-17)	QUANTITY: 2NO(1W+1S) (BQ-17)	MOC:RCC (BR-17)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'61D	HYPO DOSING PUMP	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	HYPO DOSING PUMP (L-5)	CAPACITY:1 LPH (M-5)	QUANTITY:1NO (N-5)	MOC:PP (O-5)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'61C	HYPO DOSING TANK	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	HYPO DOSING TANK (P-6)	CAPACITY:60 LTR (Q-6)	QUANTITY:1NO (R-6)	MOC:PP (S-6)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'61A	POLYMER DOSING MIXER	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	POLYMER DOSING MIXER (X-8)	QUANTITY:1NO (Y-8)	MOC:PP (Z-8)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'619	POLYMER DOSING TANK	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	POLYMER DOSING TANK (AA-9)	CAPACITY:200 LTR (AB-9)	QUANTITY:1NO (AC-9)	MOC:PP (AD-9)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'61B	POLYMER DOSING PUMP	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	POLYMER DOSING PUMP (T-7)	CAPACITY:4 LPH( U-7)	QUANTITY:1NO (V-7)	MOC:PP (W-7)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'615	VERTICAL CENTRIFUGU	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	VERTICAL CENTRIFUGE (AZ-13)	CAPACITY:{{CENTRIFUGE_CAP}}M3/HR	QUANTITY:1NO (BB-13)	MOC:SS (BC-13)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'683	FINE BUBBLE DIFFUSER	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	FINE BUBBLE DIFFUSER (D-3)	QUANTITY:1NO (E-3)	MOC:EPDM (F-3)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'682	SBR TANK	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	SBR TANK (G-4)	CAPACITY:{{SBR_TANK_CAP}}M3 (H-4)	QUANTITY:1NO (I-4)	MOC:RCC (J-4)	SWD:4M (K-4)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'60F	FILTERATE TANK	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	FILTERATE TANK (BW-19)	CAPACITY:{{FILTRATE_TANK_CAP}}M3 (BX-19)	QUANTITY:1NO (BY-19)	MOC:RCC (BZ-19)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'610	FILTER FEED PUMP	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	FILTER FEED PUMP (BS-18)	CAPACITY:1.75M3/HR@1.6BAR (BT-18)	QUANTITY:2NO(1W+1S) (BU-18)	MOC:CI (BV-18)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'618	TREATED WATER STORAGE TANK	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	TREATED WATER STORAGE TANK (AE-10)	CAPACITY:{{TREATED_WATER_STORAGE_TANK_CAP}}M3 (AF-10)	QUANTITY:1NO (AG-10)	MOC:RCC (AH-10)	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'617	ACTIVATED CARBON FILTER	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	ACTIVATED CARBON FILTER (AI-11)	SIZE:{{ACF_SIZE}}M 1.8M HT (AJ-11)	QUANTITY:1NO (AK-11)	MOC:FRP (AL-11)	ACF MEDIA (AM-11)	ACTIVATED CARBON:XXX (AN-11)	GRAVEL:XXX (AO-11)	PEBBALS:XXX (AP-11)	<>	<>	<>	<>	<>	<>	<>	<>	<>
+'616	PRESSURE SAND FILTER	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	<>	PRESSURE SAND FILTER (AQ-12)	SIZE:{{PSF_SIZE}}M X1.8M HT (AR-12)	QUANTITY:1NO (AS-12)	MOC:FRP (AT-12)	PAF MEDIA (AU-12)	GRAVEL:XXX (AV-12)	FINE SAND:XXX (AW-12)	COARSE SAND:XXX (AX-12)	PEBBALS:XXX (AY-12)`;
+
+            let fileContent = fileTemplate
+                .replace('{{AERATION_BLOWER_CAP}}', formattedResults.aerationBlowerM3hr)
+                .replace('{{MIXING_BLOWER_CAP}}', formattedResults.mixingBlower)
+                .replace('{{RAW_TRANSFER_PUMP_CAP}}', formattedResults.rawTransferPump)
+                .replace('{{EQUALIZATION_TANK_CAP}}', formattedResults.equalizationTank)
+                .replace('{{OIL_SKIMMER_CAP}}', formattedResults.oilSkimmer)
+                .replace('{{MANUAL_BAR_SCREEN_CAP}}', formattedResults.manualBarScreen)
+                .replace('{{CENTRIFUGE_FEED_PUMP_CAP}}', formattedResults.centrifugeFeedPump)
+                .replace('{{SLUDGE_TANK_CAP}}', formattedResults.sludgeTank)
+                .replace('{{SLUDGE_TRANSFER_PUMP_CAP}}', formattedResults.sludgeTransferPump)
+                .replace('{{CENTRIFUGE_CAP}}', formattedResults.centrifuge)
+                .replace('{{SBR_TANK_CAP}}', formattedResults.sbrTank)
+                .replace('{{FILTRATE_TANK_CAP}}', formattedResults.filtrateTank)
+                .replace('{{TREATED_WATER_STORAGE_TANK_CAP}}', formattedResults.treatedWaterStorageTank)
+                .replace('{{ACF_SIZE}}', formattedResults.acfSize)
+                .replace('{{PSF_SIZE}}', formattedResults.psfSize);
+
             // Show preview
             document.getElementById('filePreview').textContent = fileContent;
             
-            // Create and trigger download
-            const blob = new Blob([fileContent], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'capacity_updated.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            // Create and trigger download after a short delay for UI update
+            setTimeout(() => {
+                try {
+                    const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `capacity_calculation_${formattedResults.mainCapacity}m3hr_${new Date().toISOString().slice(0,10)}.txt`;
+                    
+                    document.body.appendChild(a);
+                    a.click();
+                    
+                    // Cleanup
+                    setTimeout(() => {
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                        document.getElementById('loading').style.display = 'none';
+                    }, 100);
+                } catch (error) {
+                    console.error('Download failed:', error);
+                    showError('Download failed. Please check console for details.');
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }, 500);
         });
+        
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            document.querySelectorAll('input[type="number"]').forEach(input => input.value = '');
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('error').textContent = '';
+            document.querySelector("#resultsTable tbody").innerHTML = "";
+            document.getElementById('filePreview').textContent = "";
+        });
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('loading').style.display = 'none';
+        }
     </script>
 </body>
 </html>
