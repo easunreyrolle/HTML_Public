@@ -277,7 +277,7 @@
             }
             
             // SBR tank volume is the daily capacity divided by the number of batches
-            const sbrTank = plantCapacity / numBatchOperations; // Unit: m³
+            const sbrTank = plantCapacity * 3 / numBatchOperations; // Unit: m³
 
             // Design parameter: 2 hours of retention time
             const filtrateTank = hourlyFlow * 2; // Unit: m³
